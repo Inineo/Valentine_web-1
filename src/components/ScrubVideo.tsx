@@ -19,6 +19,16 @@ export const ScrubVideo: React.FC<ScrubVideoProps> = ({
   const animFrameRef = useRef<number | null>(null);
   const isSeekingRef = useRef<boolean>(false);
 
+  // Aura frames the journey: visible at the opening and closing, absent while lotus is in focus.
+  // Opening phase: 0-18% scroll, aura fades out as lotus fades in
+  const openingAura = scrollProgress < 0.18 ? 1 - (scrollProgress / 0.18) : 0;
+  // Closing phase: 82-100% scroll, aura fades in as lotus fades out
+  const closingAura = scrollProgress > 0.82 ? (scrollProgress - 0.82) / 0.18 : 0;
+  // Aura is visible at start and end
+  const auraOpacity = Math.min(1, Math.max(openingAura, closingAura));
+  // Lotus is visible in the middle journey
+  const lotusOpacity = 1 - auraOpacity;
+
   // Fallback canvas animation when video is loading or if error occurs
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -135,6 +145,7 @@ export const ScrubVideo: React.FC<ScrubVideoProps> = ({
     if (!video) return;
 
     const onLoadedMetadata = () => {
+      console.log('Video metadata loaded, duration:', video.duration);
       setIsMetadataLoaded(true);
       setHasVideoError(false);
       // Immediately prime first frame
@@ -143,7 +154,8 @@ export const ScrubVideo: React.FC<ScrubVideoProps> = ({
       }
     };
 
-    const onError = () => {
+    const onError = (e: Event) => {
+      console.error('Video error:', e);
       setHasVideoError(true);
       setIsMetadataLoaded(false);
     };
@@ -158,6 +170,7 @@ export const ScrubVideo: React.FC<ScrubVideoProps> = ({
 
     // If already loaded
     if (video.readyState >= 1 && video.duration) {
+      console.log('Video already loaded');
       setIsMetadataLoaded(true);
     }
 
@@ -217,31 +230,33 @@ export const ScrubVideo: React.FC<ScrubVideoProps> = ({
       id="cinematic-video-container"
       className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden bg-[#10060a]"
     >
-      {/* Background canvas fallback & ambient organic blooming glow */}
+      {/* Burgundy aura: introduction and closing only, so it never muddies the lotus scene. */}
       <canvas
         ref={canvasRef}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-          isMetadataLoaded && !hasVideoError ? 'opacity-40' : 'opacity-100'
-        }`}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+        style={{ opacity: isMetadataLoaded && !hasVideoError ? auraOpacity : 1 }}
       />
 
-      {/* HTML5 Video Element scrubbed via currentTime */}
+      {/* Scroll-scrubbed lotus video takes focus through the central journey. */}
       <video
         ref={videoRef}
         src={videoSrc}
         muted
         playsInline
-        preload="metadata"
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-          isMetadataLoaded && !hasVideoError ? 'opacity-85' : 'opacity-0'
-        }`}
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ opacity: 1, visibility: 'visible', zIndex: 10 }}
       />
 
-      {/* Soft romantic vignette and color tint overlay so scrapbook elements pop */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#14080e]/60 via-[#1a0812]/40 to-[#0e0407]/80 mix-blend-multiply pointer-events-none" />
-
-      {/* Warm cinematic rose/burgundy glow in the center */}
-      <div className="absolute inset-0 bg-radial from-rose-950/20 via-transparent to-black/60 pointer-events-none" />
+      {/* Tint is held back with the aura so the flower colors remain clean in the middle. */}
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-[#14080e]/60 via-[#1a0812]/40 to-[#0e0407]/80 mix-blend-multiply pointer-events-none transition-opacity duration-1000"
+        style={{ opacity: auraOpacity }}
+      />
+      <div
+        className="absolute inset-0 bg-radial from-rose-950/20 via-transparent to-black/60 pointer-events-none transition-opacity duration-1000"
+        style={{ opacity: auraOpacity }}
+      />
 
       {/* Subtle film grain texture overlay */}
       <div className="absolute inset-0 bg-film-grain pointer-events-none opacity-40 mix-blend-overlay" />

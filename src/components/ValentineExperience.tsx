@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ScrubVideo } from './ScrubVideo';
+import { ScrubImageSequence } from './ScrubImageSequence';
 import { ScrapbookLayer } from './ScrapbookLayer';
 import { FloatingParticles } from './FloatingParticles';
 import { MousePosition } from '../types';
@@ -137,10 +137,13 @@ export const ValentineExperience: React.FC = () => {
     >
       {/* Fixed Fullscreen Viewport Layer */}
       <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        {/* Cinematic Scroll-Controlled Background Video */}
-        <ScrubVideo
+        {/* Cinematic Scroll-Controlled Image Sequence */}
+        <ScrubImageSequence
           scrollProgress={scrollProgress}
-          videoSrc="/videos/flower.mp4"
+          frameFolder="/frames/blooming"
+          frameCount={305}
+          framePrefix="frame_"
+          frameExtension="jpg"
           isReducedMotion={isReducedMotion}
         />
 

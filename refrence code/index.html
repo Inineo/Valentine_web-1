@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💖</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Video Background (Scroll-controlled) -->
+    <video id="videoBackground" muted playsinline preload="auto">
+        <source src="assets/Blooming lotus flower.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Background Overlay -->
+    <div class="bg-overlay"></div>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        <!-- Question Screen -->
+        <div class="question-screen" id="questionScreen">
+            <h1>Will you be my valentine? 💖</h1>
+            <div class="buttons-wrapper">
+                <button class="btn btn-yes" id="btnYes">Yes</button>
+                <button class="btn btn-no" id="btnNo">No</button>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div class="success-screen" id="successScreen">
+            <h2>Happy Valentine! 🌸✨</h2>
+            <p>Terima kasih sudah memilih Yes!</p>
+            <div class="scroll-hint" id="scrollHint">↓ scroll perlahan untuk lihat bunga mekar ↓</div>
+        </div>
+    </div>
+
+    <!-- Main Script -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

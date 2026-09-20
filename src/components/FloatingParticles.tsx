@@ -29,7 +29,7 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
 
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let width = (canvas.width = window.innerWidth);
@@ -39,6 +39,11 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      // Ensure petals reposition on resize
+      petals.forEach(p => {
+        if (p.x > width) p.x = width - 20;
+        if (p.y > height) p.y = height - 20;
+      });
     };
     window.addEventListener('resize', handleResize);
 
@@ -85,6 +90,11 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
     };
 
     const animate = () => {
+      // Ensure canvas and context are still valid
+      if (!canvas || !ctx) {
+        return;
+      }
+
       time += 0.015;
       ctx.clearRect(0, 0, width, height);
 
