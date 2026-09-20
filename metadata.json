@@ -1,6 +1,7 @@
 {
   "name": "Valentine's Day Cinematic Scrapbook",
   "description": "An immersive, scroll-controlled Valentine's Day digital scrapbook featuring romantic polaroids, handwritten notes, and physical textures over blossoming flowers.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "version": "1.0.0",
+  "author": "Inineo",
+  "repository": "https://github.com/Inineo/Valentine_web-1.git"
 }
