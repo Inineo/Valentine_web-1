@@ -74,6 +74,41 @@ export const ScrapbookLayer: React.FC<ScrapbookLayerProps> = ({
                     onSelect={setSelectedItem}
                     viewportWidth={viewportWidth}
                   />
+                ) : item.type === 'decoration' ? (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: `${item.responsive?.mobile && viewportWidth < 640 
+                        ? item.responsive.mobile.x 
+                        : item.responsive?.tablet && viewportWidth < 1024 
+                        ? item.responsive.tablet.x 
+                        : item.x}%`,
+                      top: `${item.responsive?.mobile && viewportWidth < 640 
+                        ? item.responsive.mobile.y 
+                        : item.responsive?.tablet && viewportWidth < 1024 
+                        ? item.responsive.tablet.y 
+                        : item.y}%`,
+                      transform: `translate(-50%, -50%) translate(${
+                        isReducedMotion ? 0 : (mousePos.x - 50) * item.depth * 0.15
+                      }px, ${
+                        isReducedMotion ? 0 : (mousePos.y - 50) * item.depth * 0.15
+                      }px) rotate(${item.rotation}deg) scale(${item.scale})`,
+                      zIndex: item.zIndex,
+                      pointerEvents: 'none',
+                      transition: isReducedMotion ? 'none' : 'transform 0.3s ease-out',
+                    }}
+                  >
+                    <img
+                      src={item.image}
+                      alt="decoration"
+                      style={{
+                        width: 'auto',
+                        height: 'auto',
+                        maxWidth: '150px',
+                        display: 'block',
+                      }}
+                    />
+                  </div>
                 ) : (
                   <PaperNote
                     item={item}

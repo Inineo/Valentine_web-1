@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ScrubImageSequence } from './ScrubImageSequence';
 import { ScrapbookLayer } from './ScrapbookLayer';
 import { FloatingParticles } from './FloatingParticles';
+import { CustomDatePicker } from './CustomDatePicker';
+import { CustomTimePicker } from './CustomTimePicker';
 import { MousePosition } from '../types';
 import { ChevronDown, Volume2, VolumeX, RotateCcw, Heart, Sparkles } from 'lucide-react';
 
@@ -11,6 +13,11 @@ export const ValentineExperience: React.FC = () => {
   const [mousePos, setMousePos] = useState<MousePosition>({ x: 0, y: 0 });
   const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
+  const [dateDetails, setDateDetails] = useState({
+    date: '2026-02-14',
+    time: '19:00',
+    location: 'Our Special Place'
+  });
   const audioCtxRef = useRef<AudioContext | null>(null);
   const audioGainRef = useRef<GainNode | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -196,7 +203,7 @@ export const ValentineExperience: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* --- Phase 90–100%: Final Screen Romantic Message --- */}
+        {/* --- Phase 90–100%: Final Screen Date Invitation --- */}
         <div
           style={{
             opacity: finalScreenOpacity,
@@ -205,27 +212,74 @@ export const ValentineExperience: React.FC = () => {
           }}
           className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-500"
         >
-          {/* Subtle darkening backdrop card to ensure ultimate legibility over completed collage */}
+          {/* Date Invitation Card */}
           <div className="relative max-w-xl mx-auto px-8 py-10 rounded-2xl bg-[#14060c]/75 backdrop-blur-md border border-rose-900/30 shadow-2xl">
             <div className="w-12 h-12 mx-auto rounded-full bg-rose-950/60 border border-rose-700/40 flex items-center justify-center mb-5 text-[#e57088] shadow-inner">
               <Heart className="w-6 h-6 fill-current animate-pulse" />
             </div>
 
-            <p className="font-['Cormorant_Garamond'] italic text-2xl sm:text-3xl text-[#f3d9e0] leading-relaxed">
-              &ldquo;Some memories are worth keeping forever.&rdquo;
-            </p>
+            <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-5xl text-[#fcedf0] font-normal mb-3">
+              Will You Be My Valentine?
+            </h2>
 
             <div className="mt-4 h-px w-20 mx-auto bg-gradient-to-r from-transparent via-rose-500/40 to-transparent" />
 
-            <h2 className="mt-4 font-['Caveat'] text-3xl sm:text-4xl text-[#ffc5d3] font-bold tracking-wide">
-              Happy Valentine&apos;s Day ♥
-            </h2>
+            <p className="mt-6 font-['Caveat'] text-2xl sm:text-3xl text-[#ffc5d3] font-bold tracking-wide">
+              Let&apos;s Make More Memories ♥
+            </p>
 
-            <p className="mt-2 text-xs sm:text-sm text-[#bda4ac] font-['Plus_Jakarta_Sans'] font-light">
-              Every chapter with you is my favorite story.
+            {/* Date Details - Editable - Full Box Clickable */}
+            <div className="mt-8 space-y-4 text-[#f3d9e0]">
+              {/* Date Picker - Full box clickable */}
+              <div className="flex items-center justify-center gap-3">
+                <div className="flex items-center gap-2 bg-[#2a0e18]/50 border border-rose-800/30 rounded-lg px-4 py-2 hover:border-rose-600/50 transition-all cursor-pointer">
+                  <CustomDatePicker
+                    value={dateDetails.date}
+                    onChange={(date) => setDateDetails({...dateDetails, date})}
+                  />
+                </div>
+              </div>
+              
+              {/* Time Picker - Full box clickable */}
+              <div className="flex items-center justify-center gap-3">
+                <div className="flex items-center gap-2 bg-[#2a0e18]/50 border border-rose-800/30 rounded-lg px-4 py-2 hover:border-rose-600/50 transition-all cursor-pointer">
+                  <CustomTimePicker
+                    value={dateDetails.time}
+                    onChange={(time) => setDateDetails({...dateDetails, time})}
+                  />
+                </div>
+              </div>
+              
+              {/* Location Input - Full box clickable */}
+              <div className="flex items-center justify-center gap-3">
+                <label className="flex items-center gap-2 bg-[#2a0e18]/50 border border-rose-800/30 rounded-lg px-4 py-2 hover:border-rose-600/50 focus-within:border-rose-600/50 focus-within:ring-1 focus-within:ring-rose-600/30 transition-all cursor-text w-80">
+                  <span className="text-rose-300 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  </span>
+                  <input
+                    type="text"
+                    value={dateDetails.location}
+                    onChange={(e) => setDateDetails({...dateDetails, location: e.target.value})}
+                    placeholder="Enter location..."
+                    className="flex-1 bg-transparent border-none text-base text-[#f3d9e0] font-['Plus_Jakarta_Sans'] focus:outline-none placeholder:text-rose-300/40"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <p className="mt-6 text-sm text-[#bda4ac] font-['Plus_Jakarta_Sans'] italic">
+              &ldquo;Every moment with you is worth keeping forever.&rdquo;
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={scrollToTop}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-sm font-semibold tracking-wide uppercase transition-all shadow-lg hover:scale-105 cursor-pointer border border-rose-400/40"
+              >
+                <Heart className="w-4 h-4 fill-current" />
+                <span>I&apos;d Love To!</span>
+              </button>
               <button
                 type="button"
                 onClick={scrollToTop}

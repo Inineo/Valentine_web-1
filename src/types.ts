@@ -4,6 +4,7 @@ export type ScrapbookItemType =
   | 'tape'
   | 'heart'
   | 'fragment'
+  | 'decoration'
   | 'romantic_text';
 
 export interface ResponsiveCoords {
